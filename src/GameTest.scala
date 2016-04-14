@@ -184,7 +184,7 @@ class GameTest extends FlatSpec{
     assert(!player.getCollection.forall(_.name != "3S"), "Method didn't add 3S to collection")
     assert(!player.getCollection.forall(_.name != "5H"), "Method didn't add 5H to collection")
     assert(!player.getCollection.forall(_.name != "3D"), "Method didn't add 3D to collection")
-
+    assert(player.getCollection.forall(_.name != "7M"))
     
   }
   
