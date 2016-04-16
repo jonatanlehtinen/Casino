@@ -8,6 +8,8 @@ trait Player {
   private var amountOfSpades = 0
   var isTurn = false
   var isDealer = false
+  var lastToTakeCards = false
+  
   
   def getPoints: Int = this.points
   

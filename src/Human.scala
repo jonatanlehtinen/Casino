@@ -1,6 +1,6 @@
 
 
-class Human extends Player{
+class Human(name: String) extends Player{
   
   
   

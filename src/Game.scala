@@ -1,6 +1,6 @@
 import scala.collection.mutable.Buffer
 
-class Game(var computerPlayers: Buffer[Computer], var human: Option[Human], var deck: Option[Deck], var table: Option[Table], computerAmount: Int) {
+class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var deck: Option[Deck], var table: Option[Table],humanAmount: Int, computerAmount: Int) {
   
   private var players = Vector[Player]()
   private val cardSuits = Vector("H", "S", "D", "C")
@@ -8,19 +8,23 @@ class Game(var computerPlayers: Buffer[Computer], var human: Option[Human], var 
   private var turnCount = 1
   private var dealerCount = 0
   
-  if(this.human.isEmpty){
+  if(this.human.isEmpty && this.computerPlayers.isEmpty){
     
-    this.human = Some(new Human)
     this.deck = Some(new Deck)
     this.table = Some(new Table)
     
     var nameNumber = 1
     for(x <- 0 until computerAmount){
-     this.players = this.players :+ new Computer("Computer " + nameNumber)
+      this.players = this.players :+ new Computer("Computer " + nameNumber)
      nameNumber += 1
     }
+    
+    nameNumber = 1
+    for(x <- 0 until humanAmount){
+      this.players = this.players :+ new Human("Human " + nameNumber)
+      nameNumber += 1
+    }
            
-    this.players = this.players :+ this.human.get
     this.players = scala.util.Random.shuffle(this.players)
     
     this.shuffleAndDeal()
@@ -123,7 +127,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Option[Human], var 
   def getCurrentPlayer = this.players(turnCount%players.size)
  
   
- 
+  def isOver : Boolean = false 
  
   
  

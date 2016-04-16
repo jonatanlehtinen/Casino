@@ -9,7 +9,7 @@ class GameTest extends FlatSpec{
   
   "Game's constructors" should " deal right amount of cards in the beginning" in {
     
-      val game = new Game(Buffer[Computer](), None, None, None, 3)
+    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
       val success1 = game.deck.get.getSize == 52 - 4*4 - 4
       val success2 = game.getPlayers.forall(_.getCards.size == 4) 
       val success3 =  game.table.get.getCards.size == 4
@@ -22,7 +22,7 @@ class GameTest extends FlatSpec{
   
   "Game's changeTurn" should " change players turn" in {
     
-      val game = new Game(Buffer[Computer](), None, None, None, 3)
+    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
       game.changeTurn()
       game.changeTurn()
       
@@ -44,7 +44,7 @@ class GameTest extends FlatSpec{
   
  "When taking cards methods " should "  do the correct things" in {
    
-   val game = new Game(Buffer[Computer](), None, None, None, 3)
+    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
    
    val cardSuits = Vector("H", "S", "D", "C")
    var shouldBeOnTable = ""
@@ -165,7 +165,7 @@ class GameTest extends FlatSpec{
   
     "Action class " should " act when commanded to" in {
 
-    val game = new Game(Buffer[Computer](), None, None, Some(new Table), 3)
+    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
     val player = game.getCurrentPlayer
     
     if(game.table.get.getCards.forall(_.name != "3S")) game.table.get.addCard(new Card("3S", 3, 3))
