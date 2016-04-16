@@ -136,7 +136,6 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   }
   
   def getCurrentPlayer = this.players(turnCount%players.size)
- 
   
   def isOver : Boolean = !this.players.forall(_.getCards.isEmpty)
   

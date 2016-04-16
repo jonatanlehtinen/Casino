@@ -25,8 +25,7 @@ object CasinoGUI extends SimpleSwingApplication {
   
   val computerAmountBox = new ComboBox(1 to 12)
   val humanAmountBox = new ComboBox(1 to 12)
-  val newGameButton = new Button
-  newGameButton.text = "New Game"
+  val newGameButton = new Button("New Game")
   
   val secondPanel = new BoxPanel(Orientation.Vertical)
   secondPanel.background_=(Color.lightGray)

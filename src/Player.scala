@@ -129,5 +129,6 @@ trait Player {
     if(table.getCards.isEmpty) this.addPoints(1)
     
   }
+   
   
 }

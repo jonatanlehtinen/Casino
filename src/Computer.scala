@@ -1,6 +1,6 @@
 import scala.collection.mutable._
 
-class Computer(name: String) extends Player{
+class Computer(val name: String) extends Player{
 
   
   def makeMove(table: Table) : Boolean = {
