@@ -31,6 +31,12 @@ trait Player {
     }
   }
   
+  /**
+   * Takes cards from players hand and adds them to players collection of cards
+   * @param cardsInString cards which are wanted to take from hand in string
+   * for example "2S 10D"
+   * @return Unit
+   */
   def addToCollectionFromString(cardsInString: String) : Unit = {
     
     var cardsInArray = cardsInString.split(" ")
@@ -104,16 +110,6 @@ trait Player {
     }
     this.cards.remove(toBeRemovedIndex)
   }
-  /**
-   * 
-   
-  def takeCards(cardText: String) : Boolean = {
-    
-    
-    
-    true
-  }
-  */
   
    def takeFromTable(cardsInString: String, table: Table) = {
     

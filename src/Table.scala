@@ -82,8 +82,9 @@ class Table {
   }
   
   
-  def hasDiamondTen : Boolean = !this.cards.forall(_.inHandValue != 16)
+  def hasTenOfDiamonds : Boolean = !this.cards.forall(_.inHandValue != 16)
   
+  def hasTwoOfSpades : Boolean = !this.cards.forall(_.inHandValue != 15)
   
   
   
