@@ -90,6 +90,16 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   
   def getPlayers : Vector[Player] = this.players
   
+  def giveCard(card: String) : Boolean = {
+    
+    val cardInString = card.trim
+    if(!this.getCurrentPlayer.getCards.forall(_.name != cardInString)){
+      this.table.get.addCard(this.getCurrentPlayer.removeCard(cardInString))
+      true
+    }
+    else false
+  }
+  
   def takeCard(card: String) : Boolean =  {
     
     val tableCardText = card.toUpperCase.takeWhile(_ != 'F').trim
@@ -103,7 +113,8 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
       
         currentPlayer.takeFromTable(tableCardText, this.table.get)
         currentPlayer.removeCardsAndAddToCollectin(cardsInArray)
-        println("SDGFADFH")
+        this.players.foreach(_.lastToTakeCards = false)
+        currentPlayer.lastToTakeCards = true
         true
     }
     
@@ -127,9 +138,15 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   def getCurrentPlayer = this.players(turnCount%players.size)
  
   
-  def isOver : Boolean = false 
- 
+  def isOver : Boolean = !this.players.forall(_.getCards.isEmpty)
   
+  def computerPlayerMakeMove = {
+    if(this.getCurrentPlayer.asInstanceOf[Computer].makeMove(this.table.get)) {
+      this.players.foreach(_.lastToTakeCards = false)
+      this.getCurrentPlayer.lastToTakeCards = true
+    }
+  }
+ 
  
   
   

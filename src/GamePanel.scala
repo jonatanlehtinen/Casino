@@ -7,10 +7,13 @@ import scala.collection.mutable.Buffer
 
 class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
  
-  println(game.getPlayers.mkString(" "))
+  println(game.getCurrentPlayer.getCards.mkString(" "))
+  println(game.table.get.getCards.mkString(" "))
+  println(game.getCurrentPlayer.isInstanceOf[Human])
   
   UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName) 
 
+  
   val gameInfo = new TextArea(7, 80) {
       editable = false
       wordWrap = true
@@ -29,11 +32,15 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
     
     this.reactions += {
       case keyEvent: KeyPressed =>
-        if (keyEvent.source == this.input && keyEvent.key == Key.Enter && this.game.isOver) {
+        if (keyEvent.source == this.input && keyEvent.key == Key.Enter && this.game.isOver && this.game.getCurrentPlayer.isInstanceOf[Human]) {
           val command = this.input.text.trim
           if (command.nonEmpty) {
             this.input.text = ""
-            this.playTurn(command)
+            if(new Action(command).execute(game)){
+              game.changeTurn()
+            }
+            println(game.getCurrentPlayer.getCards.mkString(" "))
+            println(game.table.get.getCards.mkString(" "))
           }
         }
     }

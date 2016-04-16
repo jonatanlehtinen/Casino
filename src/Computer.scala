@@ -3,7 +3,7 @@ import scala.collection.mutable._
 class Computer(name: String) extends Player{
 
   
-  def makeMove(table: Table) = {
+  def makeMove(table: Table) : Boolean = {
     
     val tableCardSum = table.countSum
     val cardsInString = this.makeStringFromCards(this.getCards)
@@ -12,26 +12,32 @@ class Computer(name: String) extends Player{
     if(this.getHandValueOfCards(cardsInString) == tableCardSum){
       this.takeFromTable(tableCardsInString, table)
       this.addToCollectionFromString(cardsInString)
+      true
     }
     else if(this.canTakeWithOneCard(tableCardSum)){
       this.takeFromTable(tableCardsInString, table)
       this.addToCollectionFromString(this.getMatchingCard(tableCardSum).name)
+      true
     }
     else if(table.hasTenOfDiamonds && this.hasTen){
       this.takeFromTable("10D", table)
       this.addToCollectionFromString(this.getMatchingCard(10).name)
+      true
     }
     else if(table.hasTwoOfSpades && this.hasTwo){
       this.takeFromTable("2S", table)
       this.addToCollectionFromString(this.getMatchingCard(2).name)
+      true
     }
     else if(!this.cardToDiscard.isEmpty) {
       table.addCard(this.cardToDiscard.get)
       this.takeCard(this.cardToDiscard.get)
+      false
     }
     else {
       table.addCard(this.getCards.head)
       this.takeCard(this.getCards.head)
+      false
     }
   }
   

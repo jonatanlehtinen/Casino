@@ -101,6 +101,12 @@ trait Player {
     this.points
   }
   
+  /**
+   * Removes card from players' cards and returns it, assumes
+   * that wanted card exists in players' cards
+   * @param cardText card's name
+   * @return Removed card
+   */
   def removeCard(cardText: String) : Card = {
     
     var toBeRemovedIndex = 0
@@ -113,7 +119,7 @@ trait Player {
     this.cards.remove(toBeRemovedIndex)
   }
   
-   def takeFromTable(cardsInString: String, table: Table) = {
+   def takeFromTable(cardsInString: String, table: Table ) = {
     
     val cardsInArray = cardsInString.split(" ")
    
@@ -121,6 +127,7 @@ trait Player {
       this.addtoCollection(table.removeCard(x))
     }
     if(table.getCards.isEmpty) this.addPoints(1)
+    
   }
   
 }

@@ -22,6 +22,9 @@ class Action(input: String) {
     if (this.verb == "TAKE") {
       game.takeCard(this.modifiers)
     }
+    else if(this.verb == "GIVE") {
+      game.giveCard(this.modifiers)
+    }
      else {
       false
     }
