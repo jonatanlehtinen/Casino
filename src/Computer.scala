@@ -1,6 +1,6 @@
 import scala.collection.mutable._
 
-class Computer(val name: String) extends Player{
+class Computer(name: String) extends Player(name){
 
   
   def makeMove(table: Table) : Boolean = {
@@ -35,8 +35,10 @@ class Computer(val name: String) extends Player{
       false
     }
     else {
-      table.addCard(this.getCards.head)
-      this.takeCard(this.getCards.head)
+      if(!this.getCards.isEmpty){
+        table.addCard(this.getCards.head)
+        this.takeCard(this.getCards.head)
+      }
       false
     }
   }

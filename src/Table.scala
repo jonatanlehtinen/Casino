@@ -86,6 +86,7 @@ class Table {
   
   def hasTwoOfSpades : Boolean = !this.cards.forall(_.inHandValue != 15)
   
+  def removeAllCards() = this.cards = Buffer[Card]()
   
   override def toString() = {
     var holder = ""

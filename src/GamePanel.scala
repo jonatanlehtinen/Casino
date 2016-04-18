@@ -83,11 +83,15 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
     
     def updateGameInfo() : Unit = {
       if(game.getCurrentPlayer.isInstanceOf[Human]) this.gameInfo.text = "Your cards: " + game.getCurrentPlayer.toString()
-      else this.gameInfo.text = game.getCurrentPlayer.asInstanceOf[Computer].name + " is now playing."
+      else this.gameInfo.text = game.getCurrentPlayer.name + " is now playing."
     }
     
     def updateTableInfo() : Unit = {
       this.tableInfo.text = "Currently on table: " + this.game.table.get.toString()
+    }
+    
+    def updateAfterGame() : Unit = {
+      Dialog.showMessage(new Label("Round over"), this.createPointString())
     }
      
     def pickCardForHuman() = {
@@ -95,26 +99,34 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
         this.game.getCurrentPlayer.addCard(this.game.deck.get.takeCard)
       }
     }
+    
+    def createPointString() : String = {
+      var returnString = ""
+      for(x <- this.game.getPlayers){
+        returnString += x.name + ": " + x.getPoints + ","
+      }
+      returnString
+    }
 
     
     def startNewGameOrEnd() : Unit = {
       this.game.giveCardsForLastPlayer()
       this.game.countPointsForPlayers()
       
-      
       if(!this.game.getWinningPlayer.isEmpty && this.game.getWinningPlayer.get.isInstanceOf[Computer]){
         
-        Dialog.showMessage(new Label("Game over!"), this.game.getWinningPlayer.get.asInstanceOf[Computer].name + " has won!")
-        sys.exit()
+        Dialog.showMessage(new Label("Game over!"), this.game.getWinningPlayer.get.name + " has won!")
+        CasinoGUI.closeGameFrame()
       }
       else if(!this.game.getWinningPlayer.isEmpty && this.game.getWinningPlayer.get.isInstanceOf[Human]){
         
-        Dialog.showMessage(new Label("Game over!"), this.game.getWinningPlayer.get.asInstanceOf[Human].name + " has won!")
-        sys.exit()
+        Dialog.showMessage(new Label("Game over!"), this.game.getWinningPlayer.get.name + " has won!")
+        CasinoGUI.closeGameFrame()
       }
       else {
         this.game.getPlayers.foreach(_.removeCardsAndSpades)
         this.game.shuffleAndDeal()
+        this.updateAfterGame()
       }
     }
     

@@ -11,11 +11,11 @@ class Deck {
   
   def takeCard : Card = this.deck.pop()
   
-  def canBeTaken : Boolean = this.deck.nonEmpty
+  def canBeTaken : Boolean = !this.deck.isEmpty
   
   def getSize : Int = this.deck.size
   
-  override def toString = "This deck contains: " + this.deck.foreach(println(_))
+  override def toString = "This deck contains: " + this.deck.foreach(println(_)) + canBeTaken
   
 }
 

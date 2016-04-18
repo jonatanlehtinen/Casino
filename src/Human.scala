@@ -1,6 +1,6 @@
 
 
-class Human(val name: String) extends Player{
+class Human(name: String) extends Player(name){
   
   override def toString() = {
     var holder = "" 

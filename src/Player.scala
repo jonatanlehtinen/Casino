@@ -1,6 +1,6 @@
 import scala.collection.mutable.Buffer
 
-trait Player {
+abstract class Player(val name: String) {
   
   private var points = 0
   private var cards = Buffer[Card]()

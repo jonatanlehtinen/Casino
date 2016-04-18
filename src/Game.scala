@@ -49,6 +49,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
     this.changeDealer()
     
     this.deckHolder.foreach(this.deck.get.addCards(_))
+    this.deckHolder = Buffer[Card]()
     
     for(x <- this.players){
       for(y <- 1 to 4){
@@ -64,7 +65,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
       }
     }
     
-    players(0).isTurn = true
+    players(turnCount%players.length).isTurn = true
     
     }
   
@@ -135,7 +136,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   
   def getCurrentPlayer = this.players(turnCount%players.size)
   
-  def isOver : Boolean = !this.players.forall(_.getCards.isEmpty) && !this.deck.get.canBeTaken
+  def isOver : Boolean = this.players.forall(_.getCards.isEmpty) && !this.deck.get.canBeTaken
   
   def computerPlayerMakeMove = {
     
@@ -143,7 +144,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
       
       this.getCurrentPlayer.addCard(this.deck.get.takeCard)
     }
-    
+   
     if(this.getCurrentPlayer.asInstanceOf[Computer].makeMove(this.table.get)) {
       
       this.players.foreach(_.lastToTakeCards = false)
@@ -160,9 +161,11 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   }
  
   def giveCardsForLastPlayer(): Unit = {
+    println(this.getPlayerWhoTookLastCard.asInstanceOf[Computer].name)
     for(x <- this.table.get.getCards){
       this.getPlayerWhoTookLastCard.addtoCollection(x)
     }
+    this.table.get.removeAllCards()
   }
  
   def countPointsForPlayers(): Unit = {
