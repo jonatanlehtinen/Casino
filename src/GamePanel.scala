@@ -41,26 +41,33 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
             this.input.text = ""
             if(new Action(command).execute(game)){
               game.changeTurn()
+              this.pickCardForHuman()
+              if(this.game.isOver){
+                this.startNewGameOrEnd()
+              }
               this.updateGameInfo()
               this.updateTableInfo()
             }
             else {
               this.gameInfo.text = "Incorrect command, you are allowed to use one of the following commands: give x, take x for x, exit or save. " + 
               "Your cards: " + game.getCurrentPlayer.toString()
-              
             }
-            println(game.getCurrentPlayer.getCards.mkString(" "))
-            println(game.table.get.getCards.mkString(" "))
+            println(this.game.getCurrentPlayer.getCards.mkString(" "))
+            println(this.game.table.get.toString())
           }
         }
       case buttonEvent: ButtonClicked =>
         if(this.game.getCurrentPlayer.isInstanceOf[Computer]) {
-          println(this.game.getCurrentPlayer.isInstanceOf[Computer])
           this.game.computerPlayerMakeMove
           this.game.changeTurn()
+          this.pickCardForHuman()
+          if(this.game.isOver){
+                this.startNewGameOrEnd()
+              }
           this.updateGameInfo()
           this.updateTableInfo()
         }
+        else this.gameInfo.text = "You have to make a move first! Your cards: " + game.getCurrentPlayer.toString()
     }
     
      this.contents += new GridBagPanel { 
@@ -83,10 +90,36 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
       this.tableInfo.text = "Currently on table: " + this.game.table.get.toString()
     }
      
+    def pickCardForHuman() = {
+      if(this.game.getCurrentPlayer.isInstanceOf[Human] && this.game.deck.get.canBeTaken){
+        this.game.getCurrentPlayer.addCard(this.game.deck.get.takeCard)
+      }
+    }
+
+    
+    def startNewGameOrEnd() : Unit = {
+      this.game.giveCardsForLastPlayer()
+      this.game.countPointsForPlayers()
+      
+      
+      if(!this.game.getWinningPlayer.isEmpty && this.game.getWinningPlayer.get.isInstanceOf[Computer]){
+        
+        Dialog.showMessage(new Label("Game over!"), this.game.getWinningPlayer.get.asInstanceOf[Computer].name + " has won!")
+        sys.exit()
+      }
+      else if(!this.game.getWinningPlayer.isEmpty && this.game.getWinningPlayer.get.isInstanceOf[Human]){
+        
+        Dialog.showMessage(new Label("Game over!"), this.game.getWinningPlayer.get.asInstanceOf[Human].name + " has won!")
+        sys.exit()
+      }
+      else {
+        this.game.getPlayers.foreach(_.removeCardsAndSpades)
+        this.game.shuffleAndDeal()
+      }
+    }
+    
     this.preferredSize = new Dimension(600,234)
     
     this.visible = true
-    
-    def playTurn(string: String) = ???
-  
+      
 }

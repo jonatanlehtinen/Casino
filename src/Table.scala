@@ -91,7 +91,7 @@ class Table {
     var holder = ""
     
     for(x <- this.cards){
-      holder += x.name + " Value in hand: " + x.inHandValue + " Value in table " + x.inTableValue + ", "
+      holder += x.name + " Value in table " + x.inTableValue + ", "
     }
     holder
   }

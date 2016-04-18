@@ -37,7 +37,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
          
          var inHandValue = {
            if(y == 1) 14
-           else if(y == 10 && x == "H") 16
+           else if(y == 10 && x == "D") 16
            else if(y ==  2 && x == "S") 15
            else y
          }
@@ -46,7 +46,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
     }
 
     this.deckHolder = scala.util.Random.shuffle(this.deckHolder)
-    this.players(0).isDealer = true
+    this.changeDealer()
     
     this.deckHolder.foreach(this.deck.get.addCards(_))
     
@@ -79,15 +79,13 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
     this.players(dealerCount%this.players.size).isDealer = false
     this.players(turnCount%this.players.size).isTurn = false
     this.dealerCount += 1
-    this.turnCount = this.dealerCount
+    this.turnCount = this.dealerCount + 1
     this.players(dealerCount%this.players.size).isDealer = true
     this.changeTurn()
     
   }
-  
-  
-  var isEnded = false
-  
+
+    
   def getPlayers : Vector[Player] = this.players
   
   def giveCard(card: String) : Boolean = {
@@ -137,17 +135,40 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   
   def getCurrentPlayer = this.players(turnCount%players.size)
   
-  def isOver : Boolean = !this.players.forall(_.getCards.isEmpty)
+  def isOver : Boolean = !this.players.forall(_.getCards.isEmpty) && !this.deck.get.canBeTaken
   
   def computerPlayerMakeMove = {
+    
+    if(this.deck.get.canBeTaken){
+      
+      this.getCurrentPlayer.addCard(this.deck.get.takeCard)
+    }
+    
     if(this.getCurrentPlayer.asInstanceOf[Computer].makeMove(this.table.get)) {
+      
       this.players.foreach(_.lastToTakeCards = false)
       this.getCurrentPlayer.lastToTakeCards = true
     }
   }
- 
- 
   
+  def getPlayerWhoTookLastCard : Player = this.players.find(_.lastToTakeCards).get
+    
+  def getWinningPlayer : Option[Player] = {
+    val bestPlayer = this.players.maxBy(_.getPoints)
+    if(bestPlayer.getPoints >= 16) Some(bestPlayer)
+    else None
+  }
+ 
+  def giveCardsForLastPlayer(): Unit = {
+    for(x <- this.table.get.getCards){
+      this.getPlayerWhoTookLastCard.addtoCollection(x)
+    }
+  }
+ 
+  def countPointsForPlayers(): Unit = {
+    this.players.foreach(_.countPointsAndSpades)
+    this.players.maxBy(_.getSpades).addPoints(1)
+  }
   
   
   

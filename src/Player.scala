@@ -82,8 +82,7 @@ trait Player {
 
   def containsCard(cardText: String) : Boolean =  !cards.forall(_.name != cardText)
   
-  def removeCardsAndPoints : Unit = {
-    this.points = 0
+  def removeCardsAndSpades : Unit = {
     this.amountOfSpades = 0 
     this.collectedCards = Buffer[Card]()
     this.cards = Buffer[Card]()

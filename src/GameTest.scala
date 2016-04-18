@@ -74,7 +74,7 @@ class GameTest extends FlatSpec{
     
     assert(player.countPointsAndSpades == 2, "method didn't work correctly")
    
-    player.removeCardsAndPoints
+    player.removeCardsAndSpades
     
     player.addtoCollection(new Card("10D", 16, 10))
     player.addtoCollection(new Card("2S", 15, 2))
