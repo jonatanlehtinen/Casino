@@ -5,7 +5,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   private var players = Vector[Player]()
   private val cardSuits = Vector("H", "S", "D", "C")
   private var deckHolder = Buffer[Card]()
-  private var turnCount = 1
+  private var turnCount = 0
   private var dealerCount = 0
   
   if(this.human.isEmpty && this.computerPlayers.isEmpty){
@@ -65,13 +65,14 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
       }
     }
     
-    players(turnCount%players.length).isTurn = true
+    players(turnCount%this.players.size).isTurn = true
     
     }
   
   def changeTurn() : Unit = {
     this.players(turnCount%this.players.size).isTurn = false
     this.turnCount += 1
+    println("turnCount = " + turnCount)
     this.players(turnCount%this.players.size).isTurn = true
   }
   
@@ -80,7 +81,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
     this.players(dealerCount%this.players.size).isDealer = false
     this.players(turnCount%this.players.size).isTurn = false
     this.dealerCount += 1
-    this.turnCount = this.dealerCount + 1
+    this.turnCount = this.dealerCount
     this.players(dealerCount%this.players.size).isDealer = true
     this.changeTurn()
     

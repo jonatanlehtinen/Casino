@@ -9,7 +9,7 @@ class GameTest extends FlatSpec{
   
   "Game's constructors" should " deal right amount of cards in the beginning" in {
     
-    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
+    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 1, 3)
       val success1 = game.deck.get.getSize == 52 - 4*4 - 4
       val success2 = game.getPlayers.forall(_.getCards.size == 4) 
       val success3 =  game.table.get.getCards.size == 4
@@ -26,14 +26,19 @@ class GameTest extends FlatSpec{
       game.changeTurn()
       game.changeTurn()
       
-      assert(game.getPlayers(3).isTurn, "Didn't change turns correctly")
+      println(game.getPlayers)
+      
+      println("nimi " + game.getPlayers.find { x => x.isTurn }.get)
+      
+      assert(game.getPlayers(4).isTurn, "Didn't change turns correctly")
+      
       
       game.changeDealer()
       game.changeDealer()
       
       val success1 = !game.getPlayers(1).isDealer
-      val success2 = game.getPlayers(2).isDealer
-      val success3 = game.getPlayers(3).isTurn
+      val success2 = game.getPlayers(3).isDealer
+      val success3 = game.getPlayers(4).isTurn
 
       
       assert(success1, "Original dealer is still dealer!")
@@ -81,7 +86,8 @@ class GameTest extends FlatSpec{
     player.addtoCollection(new Card("5S", 5, 5))
     player.addtoCollection(new Card("7H", 7, 7))
 
-    assert(player.countPointsAndSpades == 3, "method didn't work correctly")
+    
+    assert(player.countPointsAndSpades == 5, "method didn't work correctly")
     assert(player.getSpades == 2, "method didn't work correctly")
     
   }
@@ -187,6 +193,28 @@ class GameTest extends FlatSpec{
     assert(player.getCollection.forall(_.name != "7M"))
     
   }
+    
+    "Class SaveGame " should " produce correct textfile" in {
+      
+      val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
+
+      
+      game.getPlayers(0).addCard(new Card("6S", 6, 6))
+      game.getPlayers(0).addCard(new Card("6S", 6, 6))
+      game.getPlayers(1).addCard(new Card("6S", 6, 6))
+      game.getPlayers(2).addCard(new Card("6S", 6, 6))
+      
+      game.getPlayers(1).addPoints(3)
+      game.getPlayers(0).addPoints(5)
+      game.getPlayers(3).addCard(new Card("6S", 6, 6))
+      
+      game.getPlayers(0).addCard(new Card("6S", 6, 6))
+      game.getPlayers(4).addCard(new Card("6S", 6, 6))
+      game.getPlayers(2).addtoCollection(new Card("4D", 4, 4))
+            
+      SaveGame.saveGivenGame(game, "testsave2")
+      
+      }
   
  
    

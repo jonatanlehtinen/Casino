@@ -15,7 +15,7 @@ class Deck {
   
   def getSize : Int = this.deck.size
   
-  override def toString = "This deck contains: " + this.deck.foreach(println(_)) + canBeTaken
+  override def toString = this.deck.mkString(" ")
   
 }
 
