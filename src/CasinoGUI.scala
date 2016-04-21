@@ -1,5 +1,6 @@
 import scala.swing._
 import Swing._
+import java.io._
 import scala.swing.event._
 import scala.swing.GridBagPanel.Anchor._
 import scala.swing.GridBagPanel.Fill
@@ -13,30 +14,39 @@ object CasinoGUI extends SimpleSwingApplication {
   val computerPlayers = Buffer[Computer]()
     
   val secondTextField = new TextField
-  secondTextField.text = "Testi"
+  secondTextField.text = "Write the name of your old save here: "
+  secondTextField.horizontalAlignment = Alignment.Center
+  secondTextField.editable = false
   secondTextField.background_=(Color.lightGray)
-
-  val continueBox = new ComboBox(1 to 31)
   
   val newGameFrame = new Frame 
 
-  val emptyBox = new TextField
-  emptyBox.peer.setLocation(456, 5)
-  emptyBox.text = "moikka"
-  emptyBox.editable = false
+  val humanPlayerInfo = new TextField
+  humanPlayerInfo.peer.setLocation(456, 5)
+  humanPlayerInfo.text = "Choose the amount of human players for new game: "
+  humanPlayerInfo.editable = false
+  
+  val computerPlayerInfo = new TextField
+  computerPlayerInfo.peer.setLocation(456, 5)
+  computerPlayerInfo.text = "Choose the amount of computer players for new game: "
+  computerPlayerInfo.editable = false
   
   val computerAmountBox = new ComboBox(1 to 12)
+  val chooseSaveField = new TextField
+ // val continueGameButton = new Button("Continue")
   val humanAmountBox = new ComboBox(0 to 12)
   val newGameButton = new Button("New Game")
   
   val secondPanel = new BoxPanel(Orientation.Vertical)
   secondPanel.background_=(Color.lightGray)
   secondPanel.contents += this.secondTextField
+  secondPanel.contents += this.chooseSaveField
+ // secondPanel.contents += this.continueGameButton
   secondPanel.border = Swing.LineBorder(Color.darkGray, 34)
-  secondPanel.contents += this.continueBox
   secondPanel.contents += VStrut(30)
-  secondPanel.contents += this.emptyBox
+  secondPanel.contents += this.humanPlayerInfo
   secondPanel.contents += this.humanAmountBox 
+  secondPanel.contents += this.computerPlayerInfo
   secondPanel.contents += this.computerAmountBox
   secondPanel.contents += VStrut(30)
   secondPanel.contents += this.newGameButton
@@ -44,17 +54,7 @@ object CasinoGUI extends SimpleSwingApplication {
   secondPanel.visible = true
   
   
-  val panelForResults = new TextField
-  panelForResults.name = "Results"
-  panelForResults.horizontalAlignment = Alignment.Center
-  panelForResults.preferredSize = new Dimension(50,50)
-  panelForResults.editable = false
-  panelForResults.text = "RESULTSMoika"
-  panelForResults.background = Color.lightGray
- 
-  
   val firstPanel = new BoxPanel(Orientation.Horizontal)
-  firstPanel.contents += panelForResults
   firstPanel.border = Swing.LineBorder(Color.darkGray, 34)
   firstPanel.background = Color.lightGray
   firstPanel.visible = true
@@ -71,12 +71,24 @@ object CasinoGUI extends SimpleSwingApplication {
   window.resizable = true
   window.contents = wholeLayOut
   
-  listenTo(this.newGameButton)
+  listenTo(this.newGameButton, this.chooseSaveField.keys)
   this.reactions += {
-    case e: ButtonClicked =>
+    case ButtonClicked(newGameButton) =>
       val newGame = new GamePanel(new Game(Buffer[Computer](), Buffer[Human](), None, None, this.humanAmountBox.selection.item, this.computerAmountBox.selection.item))
       newGameFrame.contents = newGame
       newGameFrame.visible = true
+    case keyEvent : KeyPressed =>
+      if(keyEvent.key == Key.Enter && keyEvent.source == this.chooseSaveField)
+        try{
+          val gameData = scala.io.Source.fromFile(this.chooseSaveField.text).mkString
+          val oldGame = Parser.loadGame(new StringReader(gameData))
+          newGameFrame.contents = new GamePanel(oldGame)
+          newGameFrame.visible = true
+        }
+        catch {
+          case ex : Exception => 
+            this.secondTextField.text = "No such file name!"
+        }
   }
   
   UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName) 

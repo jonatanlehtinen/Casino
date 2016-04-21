@@ -25,6 +25,10 @@ class Action(input: String) {
     else if(this.verb == "GIVE") {
       game.giveCard(this.modifiers)
     }
+    else if(this.verb == "SAVE") {
+      SaveGame.saveGivenGame(game, modifiers)
+      true
+    }
      else {
       false
     }

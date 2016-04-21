@@ -194,6 +194,8 @@ class GameTest extends FlatSpec{
   "Class SaveGame " should " produce correct textfile" in {
       
     val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
+    val originalLengthOfDeck = game.deck.get.getSize
+    val originalLengthOfTableCards = game.table.get.getCards.size
 
       
     game.getPlayers(0).addCard(new Card("6S", 6, 6))
@@ -212,7 +214,12 @@ class GameTest extends FlatSpec{
     SaveGame.saveGivenGame(game, "testsave2")
     val testdata = scala.io.Source.fromFile("testsave2").mkString
     
-    println(Parser.loadGame(new StringReader(testdata)).computerPlayers.mkString(" "))
+    val loadedGame = Parser.loadGame(new StringReader(testdata))
+    
+    assert(loadedGame.getPlayers.length == 6, "Didn't add correct amount of players to game")
+    assert(!loadedGame.human.forall{x => x.name != "Human 3"}, "Didn't name players correctly")
+    assert(loadedGame.deck.get.getSize == originalLengthOfDeck, "Didn't add cards correctly to deck")
+    assert(loadedGame.table.get.getCards.size == originalLengthOfTableCards, "Didn't add cards correctly to table")
     
     }
   

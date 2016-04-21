@@ -32,10 +32,9 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
     this.listenTo(input.keys)
     this.listenTo(this.nextPlayerButton)
     
-    
     this.reactions += {
       case keyEvent: KeyPressed =>
-        if (keyEvent.source == this.input && keyEvent.key == Key.Enter && this.game.isOver && this.game.getCurrentPlayer.isInstanceOf[Human]) {
+        if (keyEvent.source == this.input && keyEvent.key == Key.Enter && !this.game.isOver && this.game.getCurrentPlayer.isInstanceOf[Human]) {
           val command = this.input.text.trim
           if (command.nonEmpty) {
             this.input.text = ""
@@ -67,7 +66,10 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
           this.updateGameInfo()
           this.updateTableInfo()
         }
-        else this.gameInfo.text = "You have to make a move first! Your cards: " + game.getCurrentPlayer.toString()
+        else {
+          println(this.game.isOver)
+          this.gameInfo.text = "You have to make a move first! Your cards: " + game.getCurrentPlayer.toString()
+        }
     }
     
      this.contents += new GridBagPanel { 

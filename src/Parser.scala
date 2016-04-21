@@ -9,6 +9,8 @@ object Parser {
     
     val lineReader = new BufferedReader(input) 
     
+    val deck = new Deck
+    val table = new Table
     var computerPlayers = Buffer[Computer]()
     var humanPlayers = Buffer[Human]()
     var newPlayer: Option[Player] = None
@@ -53,7 +55,9 @@ object Parser {
         while(readLine.head != 'H' && readLine.head != 'C' && readLine != '#'){
           var lineSplitted = readLine.split(" ")
           newPlayer.get.addtoCollection(new Card(lineSplitted(0), lineSplitted(1).toInt, lineSplitted(2).toInt))
+          readLine = lineReader.readLine()
           while(readLine.isEmpty){
+            println("moikka")
             readLine = lineReader.readLine()
           }
         }
@@ -62,9 +66,27 @@ object Parser {
         computerPlayers += newPlayer.get.asInstanceOf[Computer]
       }
       else humanPlayers += newPlayer.get.asInstanceOf[Human]
+      
+      while(readLine.isEmpty){
+            readLine = lineReader.readLine()
+          }
     }
-       
-    new Game(computerPlayers, Buffer[Human](), None, Some(new Table), 3, 3)
+    
+    readLine = lineReader.readLine()
+    while(readLine.head != '#'){
+      var lineSplitted = readLine.split(" ")
+      deck.addCards((new Card(lineSplitted(0), lineSplitted(1).toInt, lineSplitted(2).toInt)))
+      readLine = lineReader.readLine()
+    }
+    
+    readLine = lineReader.readLine()
+    while(readLine != "EOF"){
+      var lineSplitted = readLine.split(" ")
+      table.addCard((new Card(lineSplitted(0), lineSplitted(1).toInt, lineSplitted(2).toInt)))
+      readLine = lineReader.readLine()
+    }
+    
+    new Game(computerPlayers, humanPlayers, Some(deck), Some(table), 0, 0)
    
   }
     

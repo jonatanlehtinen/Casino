@@ -25,13 +25,21 @@ object SaveGame{
   
   }
   
+  def getCollection(collection: Buffer[Card]) : String = {
+    var returnString = ""
+    if(collection.isEmpty){
+      returnString  
+    }
+    else collection.mkString("\n") + "\n"
+    
+  }
   
   def playerString(players: Vector[Player]) : String = {
     
     var returnString = "#Pelaajat\n"
     
     for(x <- players){
-      returnString += x.name + "\n" + x.getPoints + "\n" + x.getCards.mkString("\n") + "\n" + x.isDealer + "\n" + x.isTurn + "\n" + x.getCollection.mkString("\n")
+      returnString += x.name + "\n" + x.getPoints + "\n" + x.getCards.mkString("\n") + "\n" + x.isDealer + "\n" + x.isTurn + "\n" + this.getCollection(x.getCollection)
     }
     
     returnString

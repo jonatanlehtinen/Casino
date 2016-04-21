@@ -29,6 +29,12 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
     
     this.shuffleAndDeal()
   }
+  else{
+    
+    this.players = this.players ++ this.computerPlayers
+    this.players = this.players ++ this.human
+    this.players = scala.util.Random.shuffle(this.players)
+  }
   
   def shuffleAndDeal(): Unit = {
     for(x <- cardSuits){
