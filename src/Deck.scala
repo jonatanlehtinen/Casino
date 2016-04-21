@@ -1,7 +1,9 @@
 import scala.collection.mutable.Stack
 
 
-case class Card(val name: String, val inHandValue: Int, val inTableValue: Int) 
+case class Card(val name: String, val inHandValue: Int, val inTableValue: Int) {
+  override def toString() = name + " " + inHandValue + " " + inTableValue
+}
 
 class Deck {
   
@@ -15,7 +17,7 @@ class Deck {
   
   def getSize : Int = this.deck.size
   
-  override def toString = this.deck.mkString(" ")
+  override def toString = this.deck.mkString("\n")
   
 }
 

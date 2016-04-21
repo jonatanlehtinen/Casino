@@ -1,4 +1,5 @@
 import scala.collection.mutable._
+import java.io._
 import org.scalatest.FlatSpec
 import org.scalatest.Matchers
 import org.scalatest.Assertions._
@@ -24,11 +25,7 @@ class GameTest extends FlatSpec{
     
     val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
       game.changeTurn()
-      game.changeTurn()
-      
-      println(game.getPlayers)
-      
-      println("nimi " + game.getPlayers.find { x => x.isTurn }.get)
+      game.changeTurn()      
       
       assert(game.getPlayers(4).isTurn, "Didn't change turns correctly")
       
@@ -194,27 +191,30 @@ class GameTest extends FlatSpec{
     
   }
     
-    "Class SaveGame " should " produce correct textfile" in {
+  "Class SaveGame " should " produce correct textfile" in {
       
-      val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
+    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
 
       
-      game.getPlayers(0).addCard(new Card("6S", 6, 6))
-      game.getPlayers(0).addCard(new Card("6S", 6, 6))
-      game.getPlayers(1).addCard(new Card("6S", 6, 6))
-      game.getPlayers(2).addCard(new Card("6S", 6, 6))
+    game.getPlayers(0).addCard(new Card("6S", 6, 6))
+    game.getPlayers(0).addCard(new Card("6S", 6, 6))
+    game.getPlayers(1).addCard(new Card("6S", 6, 6))
+    game.getPlayers(2).addCard(new Card("6S", 6, 6))
       
-      game.getPlayers(1).addPoints(3)
-      game.getPlayers(0).addPoints(5)
-      game.getPlayers(3).addCard(new Card("6S", 6, 6))
+    game.getPlayers(1).addPoints(3)
+    game.getPlayers(0).addPoints(5)
+    game.getPlayers(3).addCard(new Card("6S", 6, 6))
       
-      game.getPlayers(0).addCard(new Card("6S", 6, 6))
-      game.getPlayers(4).addCard(new Card("6S", 6, 6))
-      game.getPlayers(2).addtoCollection(new Card("4D", 4, 4))
+    game.getPlayers(0).addCard(new Card("6S", 6, 6))
+    game.getPlayers(4).addCard(new Card("6S", 6, 6))
+    game.getPlayers(2).addtoCollection(new Card("4D", 4, 4))
             
-      SaveGame.saveGivenGame(game, "testsave2")
-      
-      }
+    SaveGame.saveGivenGame(game, "testsave2")
+    val testdata = scala.io.Source.fromFile("testsave2").mkString
+    
+    println(Parser.loadGame(new StringReader(testdata)).computerPlayers.mkString(" "))
+    
+    }
   
  
    

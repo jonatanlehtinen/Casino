@@ -72,7 +72,6 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   def changeTurn() : Unit = {
     this.players(turnCount%this.players.size).isTurn = false
     this.turnCount += 1
-    println("turnCount = " + turnCount)
     this.players(turnCount%this.players.size).isTurn = true
   }
   

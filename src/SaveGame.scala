@@ -14,7 +14,8 @@ object SaveGame{
     file.println("#Deck")
     file.println(game.deck.get.toString())
     file.println("#Table")
-    file.println(game.table.get.getCards.mkString(" "))
+    file.println(game.table.get.getCards.mkString("\n"))
+    file.println("EOF")
   }
   
   finally {
@@ -30,7 +31,7 @@ object SaveGame{
     var returnString = "#Pelaajat\n"
     
     for(x <- players){
-      returnString += x.name + "\n" + x.getPoints + "\n" + x.getCards.mkString(" ") + "\n" + x.isDealer + "\n" + x.isTurn + "\n" + x.getCollection.mkString(" ") + "\n"
+      returnString += x.name + "\n" + x.getPoints + "\n" + x.getCards.mkString("\n") + "\n" + x.isDealer + "\n" + x.isTurn + "\n" + x.getCollection.mkString("\n")
     }
     
     returnString
