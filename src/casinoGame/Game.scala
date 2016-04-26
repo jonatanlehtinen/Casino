@@ -129,7 +129,8 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   
   /**
    * human players use this function to take cards from table
-   * @param card 
+   * @param card string containing cards' names
+   * @return Boolean
    */
   def takeCard(card: String) : Boolean =  {
     
@@ -152,6 +153,7 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
     else false
   }
   
+  
   def tableContainsCards(cards: Buffer[Card], cardsInString: String) : Boolean = {
     
     val cardsInArray = cardsInString.split(" ")
@@ -170,6 +172,9 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   
   def isOver : Boolean = this.players.forall(_.getCards.isEmpty) && !this.deck.get.canBeTaken
   
+  /**
+   * Method which makes computer players play their turn
+   */
   def computerPlayerMakeMove = {
     
     if(this.deck.get.canBeTaken){
@@ -205,12 +210,6 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
     this.players.maxBy(_.getSpades).addPoints(1)
   }
   
-  def goBackOneTurn() = {
-    println(players.mkString(" "))
-    this.players(turnCount%players.size).isTurn = false
-    this.turnCount -= 1
-    this.players(turnCount%players.size).isTurn = true
-  }
   
   
   

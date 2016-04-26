@@ -12,33 +12,48 @@ import scala.collection.mutable.Buffer
 import java.awt.Color
 import casinoGame._
 
+/**
+ * This object implements graphical user interface for game's 
+ * options and its methods can start new game or load an old one
+ */
 object CasinoGUI extends SimpleSwingApplication {
   
   val computerPlayers = Buffer[Computer]()
     
+  //text field for loading game
   val secondTextField = new TextField
   secondTextField.text = "Write the name of your old save here: "
   secondTextField.horizontalAlignment = Alignment.Center
   secondTextField.editable = false
   secondTextField.background_=(Color.lightGray)
   
+  //Text field where old game's name is inputted
+  val chooseSaveField = new TextField
+
+  //frame for GamePanel
   val newGameFrame = new Frame 
 
+  //Text field for info 
   val humanPlayerInfo = new TextField
   humanPlayerInfo.peer.setLocation(456, 5)
   humanPlayerInfo.text = "Choose the amount of human players for new game: "
   humanPlayerInfo.editable = false
   
+  //Selection of human players
+  val humanAmountBox = new ComboBox(0 to 12)
+  
+  //Text field for info
   val computerPlayerInfo = new TextField
   computerPlayerInfo.peer.setLocation(456, 5)
   computerPlayerInfo.text = "Choose the amount of computer players for new game: "
   computerPlayerInfo.editable = false
   
+  //Selection for computer players
   val computerAmountBox = new ComboBox(1 to 12)
-  val chooseSaveField = new TextField
-  val humanAmountBox = new ComboBox(0 to 12)
+  
   val newGameButton = new Button("New Game")
   
+  //Panel where all the above is added
   val secondPanel = new BoxPanel(Orientation.Vertical)
   secondPanel.background_=(Color.lightGray)
   secondPanel.contents += this.secondTextField
@@ -54,42 +69,43 @@ object CasinoGUI extends SimpleSwingApplication {
   secondPanel.preferredSize = new Dimension(10,10)
   secondPanel.visible = true
   
-  
-  val firstPanel = new BoxPanel(Orientation.Horizontal)
-  firstPanel.border = Swing.LineBorder(Color.darkGray, 34)
-  firstPanel.background = Color.lightGray
-  firstPanel.visible = true
-  firstPanel.preferredSize = new Dimension(30, 30)
-  
+  //Whole layout where all the above is added
   val wholeLayOut = new BoxPanel(Orientation.Horizontal)
   wholeLayOut.background = Color.darkGray
   wholeLayOut.preferredSize_= (new Dimension(450, 450))
-  wholeLayOut.contents += this.firstPanel
   wholeLayOut.contents += this.secondPanel
 
+  //mainframe
   val window = new MainFrame
   window.title = "Casino"
   window.resizable = true
   window.contents = wholeLayOut
   
+  //listen to newGameButton and text field or loading game
   listenTo(this.newGameButton, this.chooseSaveField.keys)
   this.reactions += {
+    
     case ButtonClicked(newGameButton) =>
+      
+      //creates new game based on input from combo boxes
       val newGame = new GamePanel(new Game(Buffer[Computer](), Buffer[Human](), None, None, this.humanAmountBox.selection.item, this.computerAmountBox.selection.item))
       newGameFrame.contents = newGame
       newGameFrame.visible = true
+      
     case keyEvent : KeyPressed =>
+      
       if(keyEvent.key == Key.Enter && keyEvent.source == this.chooseSaveField)
+        //tries to load old game based on input
         try{
           val gameData = scala.io.Source.fromFile(this.chooseSaveField.text.toUpperCase()).mkString
           val oldGame = Parser.loadGame(new StringReader(gameData))
-          //oldGame.goBackOneTurn()
           newGameFrame.contents = new GamePanel(oldGame)
           newGameFrame.visible = true
         }
+      
         catch {
           case ex : Exception => 
-            this.secondTextField.text = "No such file name!" + ex
+            this.secondTextField.text = "No such file name!"
         }
   }
   
@@ -97,6 +113,7 @@ object CasinoGUI extends SimpleSwingApplication {
 
   def top = this.window
   
+  //method for closing GamePanel
   def closeGameFrame() = this.newGameFrame.close()
   
 }

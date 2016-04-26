@@ -1,12 +1,15 @@
 package casinoGame
 
+/**
+ * Action class represents action made by human player
+ */
 class Action(input: String) {
 
   private val commandText = input.trim.toUpperCase
   private val verb        = commandText.takeWhile( _ != ' ' )
   private val modifiers   = commandText.drop(verb.length).trim
 
-
+  //with this method action is executed
   def execute(game: Game) : Boolean = {                             
 
     if (this.verb == "TAKE") {

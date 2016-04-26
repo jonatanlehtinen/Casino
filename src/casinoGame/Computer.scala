@@ -2,10 +2,16 @@ package casinoGame
 
 import scala.collection.mutable._
 
-
+/**
+ * represents computer player
+ */
 class Computer(name: String) extends Player(name){
 
-  
+  /**
+   * Artificial intelligence is implemented within this method
+  	more info about AI can be found in the documentation
+ 	 	@param table table to where computers makes its move
+  */
   def makeMove(table: Table) : Boolean = {
     
     val tableCardSum = table.countSum
@@ -50,6 +56,12 @@ class Computer(name: String) extends Player(name){
   
   def hasTwo : Boolean = !this.getCards.forall(_.inHandValue != 2)
   
+  /**
+   * check if computer can take all the table cards with 
+   * one card
+   * @param tableCardSum sum of the card values on the table
+   */
+  
   def canTakeWithOneCard(tableCardSum: Int) : Boolean =  !this.getCards.forall(_.inHandValue != tableCardSum)
   
   /**
@@ -60,6 +72,11 @@ class Computer(name: String) extends Player(name){
    */
   def getMatchingCard(tableCardSum: Int) : Card = this.getCards.find(_.inHandValue == tableCardSum).get
    
+  /**
+   * This method tries to find card which would not be so big
+   * loss for computer to put on table
+   * @return Option[Card] returns found card, none if nothing was found
+   */
   def cardToDiscard : Option[Card] = this.getCards.find{x => x.inHandValue != 10 && x.inHandValue != 2 && x.inHandValue != 14}
     
     

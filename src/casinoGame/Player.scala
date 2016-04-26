@@ -2,14 +2,24 @@ package casinoGame
 
 import scala.collection.mutable.Buffer
 
+/**
+ * Player class represents players in casino game
+ */
 abstract class Player(val name: String) {
   
   private var points = 0
+  
+  //cards which player is holding in his hand
   private var cards = Buffer[Card]()
+  
+  //cars which player has collected from table
   private var collectedCards = Buffer[Card]()
   private var amountOfSpades = 0
   var isTurn = false
   var isDealer = false
+  
+  //Boolean var indicating whether player took last card or not 
+  //with this var it is determined which player will be given last cards from table
   var lastToTakeCards = false
   
   

@@ -3,15 +3,24 @@ package casinoGame
 import java.io.PrintWriter
 import scala.collection.mutable._
 
-
+/**
+ * This object saves game as a specific text file
+ * 
+ */
 object SaveGame{
   
+  /**
+   * this method does all the work
+   * @param game game to be saved
+   * @param savingName name of the save, also name of the text file
+   */
   def saveGivenGame(game: Game, savingName: String) = {
   
   val fileName = ""
   
   val file = new PrintWriter(savingName)
   
+  //tries to add all the necessary information
   try {
     file.println(this.playerString(game.getPlayers))
     println(game.getPlayers.mkString(" "))
@@ -29,6 +38,7 @@ object SaveGame{
   
   }
   
+  //helper method to create wanted string from player's collection
   def getCollection(collection: Buffer[Card]) : String = {
     var returnString = ""
     if(collection.isEmpty){
@@ -38,6 +48,7 @@ object SaveGame{
     
   }
   
+  //helper method to create wanted string from players
   def playerString(players: Vector[Player]) : String = {
     
     var returnString = "#Pelaajat\n"
