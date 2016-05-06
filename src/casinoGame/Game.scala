@@ -12,17 +12,17 @@ import scala.Vector
  * @param humanAmount amount of human players
  * @param computerAmount amount of computer players
  */
-class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var deck: Option[Deck], var table: Option[Table],humanAmount: Int, computerAmount: Int) {
+class Game(var allPlayers: Buffer[Player], var deck: Option[Deck], var table: Option[Table],humanAmount: Int, computerAmount: Int) {
   
   private var players = Vector[Player]()
   private val cardSuits = Vector("H", "S", "D", "C")
   private var deckHolder = Buffer[Card]()
-  private var turnCount = 0
-  private var dealerCount = 0
+  var turnCount = 0
+  var dealerCount = 0
   
   
   //Constructors initialize new game by creating players and cards
-  if(this.human.isEmpty && this.computerPlayers.isEmpty){
+  if(this.allPlayers.isEmpty){
     
     this.deck = Some(new Deck)
     this.table = Some(new Table)
@@ -45,10 +45,12 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   }
   
   //if game is loaded constructors doesn't have to create new cards and players
+  //turnCount and dealerCount values are imported through humanAmount and computerAmount
+  //variables, which are not needed when loading game.
   else{
-    this.players = this.players ++ this.computerPlayers
-    this.players = this.players ++ this.human
-    this.players = scala.util.Random.shuffle(this.players)
+    this.turnCount = humanAmount
+    this.dealerCount = computerAmount
+    this.players = this.allPlayers.toVector
   }
   
   def shuffleAndDeal(): Unit = {
@@ -198,7 +200,6 @@ class Game(var computerPlayers: Buffer[Computer], var human: Buffer[Human], var 
   }
  
   def giveCardsForLastPlayer(): Unit = {
-    println(this.getPlayerWhoTookLastCard.asInstanceOf[Computer].name)
     for(x <- this.table.get.getCards){
       this.getPlayerWhoTookLastCard.addtoCollection(x)
     }

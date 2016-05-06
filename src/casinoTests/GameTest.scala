@@ -4,23 +4,14 @@ import scala.collection.mutable._
 import java.io._
 import org.scalatest.FlatSpec
 import org.scalatest.Assertions._
-import casinoGame.Action
-import casinoGame.Card
-import casinoGame.Computer
-import casinoGame.Game
-import casinoGame.Human
-import casinoGame.Parser
-import casinoGame.SaveGame
-import casinoGame.Table
-import scala.Vector
+import casinoGame._
 
 
 class GameTest extends FlatSpec{
   
-  
   "Game's constructors" should " deal right amount of cards in the beginning" in {
     
-    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 1, 3)
+    val game = new Game(Buffer[Player](), None, Some(new Table), 1, 3)
       val success1 = game.deck.get.getSize == 52 - 4*4 - 4
       val success2 = game.getPlayers.forall(_.getCards.size == 4) 
       val success3 =  game.table.get.getCards.size == 4
@@ -33,9 +24,9 @@ class GameTest extends FlatSpec{
   
   "Game's changeTurn" should " change players turn" in {
     
-    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
+    val game = new Game(Buffer[Player](), None, Some(new Table), 3, 3)
       game.changeTurn()
-      game.changeTurn()      
+      game.changeTurn()
       
       assert(game.getPlayers(4).isTurn, "Didn't change turns correctly")
       
@@ -56,7 +47,7 @@ class GameTest extends FlatSpec{
   
  "When taking cards methods " should "  do the correct things" in {
    
-    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
+    val game = new Game(Buffer[Player](), None, Some(new Table), 3, 3)
    
    val cardSuits = Vector("H", "S", "D", "C")
    var shouldBeOnTable = ""
@@ -178,7 +169,7 @@ class GameTest extends FlatSpec{
   
     "Action class " should " act when commanded to" in {
 
-    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
+    val game = new Game(Buffer[Player](), None, Some(new Table), 3, 3)
     val player = game.getCurrentPlayer
     
     if(game.table.get.getCards.forall(_.name != "3S")) game.table.get.addCard(new Card("3S", 3, 3))
@@ -203,7 +194,7 @@ class GameTest extends FlatSpec{
     
   "Class SaveGame " should " produce correct textfile" in {
       
-    val game = new Game(Buffer[Computer](), Buffer[Human](), None, Some(new Table), 3, 3)
+    val game = new Game(Buffer[Player](), None, Some(new Table), 3, 3)
     val originalLengthOfDeck = game.deck.get.getSize
     val originalLengthOfTableCards = game.table.get.getCards.size
 
@@ -227,7 +218,7 @@ class GameTest extends FlatSpec{
     val loadedGame = Parser.loadGame(new StringReader(testdata))
     
     assert(loadedGame.getPlayers.length == 6, "Didn't add correct amount of players to game")
-    assert(!loadedGame.human.forall{x => x.name != "Human 3"}, "Didn't name players correctly")
+    assert(!loadedGame.allPlayers.forall{x => x.name != "Human 3"}, "Didn't name players correctly")
     assert(loadedGame.deck.get.getSize == originalLengthOfDeck, "Didn't add cards correctly to deck")
     assert(loadedGame.table.get.getCards.size == originalLengthOfTableCards, "Didn't add cards correctly to table")
     

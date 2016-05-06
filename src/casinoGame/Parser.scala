@@ -23,8 +23,7 @@ object Parser {
     
     val deck = new Deck
     val table = new Table
-    var computerPlayers = Buffer[Computer]()
-    var humanPlayers = Buffer[Human]()
+    var allPlayers = Buffer[Player]()
     var newPlayer: Option[Player] = None
     
     var readLine = lineReader.readLine()
@@ -86,10 +85,7 @@ object Parser {
         }
       }
       
-      if(newPlayer.get.isInstanceOf[Computer]){
-        computerPlayers += newPlayer.get.asInstanceOf[Computer]
-      }
-      else humanPlayers += newPlayer.get.asInstanceOf[Human]
+      allPlayers += newPlayer.get
       
       while(readLine.isEmpty){
             readLine = lineReader.readLine()
@@ -111,15 +107,20 @@ object Parser {
     }
     
     //add cards to table
-    while(readLine != "EOF"){
+    while(readLine.head != '#'){
       
       var lineSplitted = readLine.split(" ")
       table.addCard((new Card(lineSplitted(0), lineSplitted(1).toInt, lineSplitted(2).toInt)))
       readLine = lineReader.readLine()
     }
     
+    readLine = lineReader.readLine()
+    val turnCount = readLine.toInt
+    readLine = lineReader.readLine()
+    val dealerCount = readLine.toInt
+    
     //return new game based on the input which was just parsed
-    new Game(computerPlayers, humanPlayers, Some(deck), Some(table), 0, 0)
+    new Game(allPlayers, Some(deck), Some(table), turnCount, dealerCount)
    
   }
     

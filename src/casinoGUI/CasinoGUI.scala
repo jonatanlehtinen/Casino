@@ -87,7 +87,7 @@ object CasinoGUI extends SimpleSwingApplication {
     case ButtonClicked(newGameButton) =>
 
       //creates new game based on input from combo boxes
-      val newGame = new GamePanel(new Game(Buffer[Computer](), Buffer[Human](), None, None, this.humanAmountBox.selection.item, this.computerAmountBox.selection.item))
+      val newGame = new GamePanel(new Game(Buffer[Player](), None, None, this.humanAmountBox.selection.item, this.computerAmountBox.selection.item))
       newGameFrame.contents = newGame
       newGameFrame.visible = true
       
@@ -105,7 +105,7 @@ object CasinoGUI extends SimpleSwingApplication {
       
         catch {
           case ex : Exception => 
-            this.secondTextField.text = "No such file name!"
+            this.secondTextField.text = "No such file name or file is corrupted!"
         }
   }
   

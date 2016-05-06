@@ -23,11 +23,13 @@ object SaveGame{
   //tries to add all the necessary information
   try {
     file.println(this.playerString(game.getPlayers))
-    println(game.getPlayers.mkString(" "))
     file.println("#Deck")
     file.println(game.deck.get.toString())
     file.println("#Table")
     file.println(game.table.get.getCards.mkString("\n"))
+    file.println("#TurnandDealerCount")
+    file.println(game.turnCount)
+    file.println(game.dealerCount)
     file.println("EOF")
   }
   
