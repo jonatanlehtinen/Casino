@@ -39,7 +39,7 @@ abstract class Player(val name: String) {
   
   def getCollection : Buffer[Card] = this.collectedCards
   
-  def removeCardsAndAddToCollectin(cardsInArray : Array[String])  {
+  def removeCardsAndAddToCollectin(cardsInArray : Array[String]) = {
     for(x <- cardsInArray){
       this.addtoCollection(this.removeCard(x))
     }
@@ -130,7 +130,7 @@ abstract class Player(val name: String) {
     this.cards.remove(toBeRemovedIndex)
   }
   
-   def takeFromTable(cardsInString: String, table: Table ) = {
+   def takeFromTable(cardsInString: String, table: Table ) : Unit = {
     
     val cardsInArray = cardsInString.split(" ")
    

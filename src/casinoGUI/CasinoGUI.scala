@@ -17,12 +17,10 @@ import casinoGame._
  * options and its methods can start new game or load an old one
  */
 object CasinoGUI extends SimpleSwingApplication {
-  
-  val computerPlayers = Buffer[Computer]()
-    
+      
   //text field for loading game
   val secondTextField = new TextField
-  secondTextField.text = "Write the name of your old save here: "
+  secondTextField.text = "Write the name of your old save here and press enter: "
   secondTextField.horizontalAlignment = Alignment.Center
   secondTextField.editable = false
   secondTextField.background_=(Color.lightGray)
@@ -52,6 +50,7 @@ object CasinoGUI extends SimpleSwingApplication {
   val computerAmountBox = new ComboBox(1 to 12)
   
   val newGameButton = new Button("New Game")
+  newGameButton.horizontalAlignment = Alignment.Center
   
   //Panel where all the above is added
   val secondPanel = new BoxPanel(Orientation.Vertical)
@@ -86,13 +85,14 @@ object CasinoGUI extends SimpleSwingApplication {
   this.reactions += {
     
     case ButtonClicked(newGameButton) =>
-      
+
       //creates new game based on input from combo boxes
       val newGame = new GamePanel(new Game(Buffer[Computer](), Buffer[Human](), None, None, this.humanAmountBox.selection.item, this.computerAmountBox.selection.item))
       newGameFrame.contents = newGame
       newGameFrame.visible = true
       
     case keyEvent : KeyPressed =>
+      
       
       if(keyEvent.key == Key.Enter && keyEvent.source == this.chooseSaveField)
         //tries to load old game based on input
@@ -114,7 +114,7 @@ object CasinoGUI extends SimpleSwingApplication {
   def top = this.window
   
   //method for closing GamePanel
-  def closeGameFrame() = this.newGameFrame.close()
+  def closeGameFrame() : Unit = this.newGameFrame.close()
   
 }
 

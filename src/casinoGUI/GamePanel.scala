@@ -68,7 +68,7 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
               }
             }
             else {
-              this.gameInfo.text = "Incorrect command, you are allowed to use one of the following commands: give x, take x for x, exit or save. " + 
+              this.gameInfo.text = "Incorrect command, you are allowed to use one of the following commands: give x, take x for x, or save x. " + 
               "Your cards: " + game.getCurrentPlayer.toString()
             }
           }
@@ -90,7 +90,6 @@ class GamePanel(game: Game) extends BoxPanel(Orientation.Vertical) {
         }
         
         else {
-          println(this.game.isOver)
           this.gameInfo.text = "You have to make a move first! Your cards: " + game.getCurrentPlayer.toString()
         }
     }
